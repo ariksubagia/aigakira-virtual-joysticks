@@ -1,0 +1,45 @@
+{
+  "api": 7,
+  "version": 1,
+  "name": "Virtual Joysticks",
+  "id": "io.github.virtualjoysticks.plugin",
+  "configuration": {"parentCategory": "games"},
+  "plugin_start_cmd_linux": "/usr/bin/python3 plugin.py",
+  "plugin_start_cmd_windows": "py -3 plugin.py",
+  "settings": [
+    {"name": "UDP Host", "type": "text", "default": "127.0.0.1"},
+    {"name": "UDP Port", "type": "number", "default": "12100", "minValue": 1, "maxValue": 65535}
+  ],
+  "categories": [
+    {
+      "id": "io.github.virtualjoysticks.category",
+      "name": "Virtual Joysticks",
+      "actions": [
+        {
+          "id": "io.github.virtualjoysticks.button",
+          "name": "Joystick button",
+          "type": "communicate",
+          "lines": {"action": [{"language": "default", "data": [{"lineFormat": "Joystick {$io.github.virtualjoysticks.button.device$} button {$io.github.virtualjoysticks.button.number$}: {$io.github.virtualjoysticks.button.action$}"}]}]},
+          "data": [
+            {"id": "io.github.virtualjoysticks.button.device", "type": "number", "label": "Device", "default": 1, "minValue": 1, "maxValue": 4, "allowDecimals": false},
+            {"id": "io.github.virtualjoysticks.button.number", "type": "number", "label": "Button", "default": 1, "minValue": 1, "maxValue": 32, "allowDecimals": false},
+            {"id": "io.github.virtualjoysticks.button.action", "type": "choice", "label": "Action", "default": "Pulse", "valueChoices": ["Pulse", "Press", "Release"]}
+          ]
+        },
+        {
+          "id": "io.github.virtualjoysticks.axis",
+          "name": "Set joystick axis",
+          "type": "communicate",
+          "lines": {"action": [{"language": "default", "data": [{"lineFormat": "Joystick {$io.github.virtualjoysticks.axis.device$} axis {$io.github.virtualjoysticks.axis.name$} value {$io.github.virtualjoysticks.axis.value$}"}]}]},
+          "data": [
+            {"id": "io.github.virtualjoysticks.axis.device", "type": "number", "label": "Device", "default": 1, "minValue": 1, "maxValue": 4, "allowDecimals": false},
+            {"id": "io.github.virtualjoysticks.axis.name", "type": "choice", "label": "Axis", "default": "x", "valueChoices": ["x", "y", "rx", "ry", "z", "rz", "hat_x", "hat_y"]},
+            {"id": "io.github.virtualjoysticks.axis.value", "type": "number", "label": "Value", "default": 0, "minValue": -32768, "maxValue": 32767, "allowDecimals": false}
+          ]
+        }
+      ],
+      "events": [],
+      "states": []
+    }
+  ]
+}

@@ -25,13 +25,25 @@ Use an existing `aigakira-virtual-joysticks.tpp` package, or create one using th
 
 ### Linux
 
-1. Install your distribution's `python3-evdev` package, then check that the interpreter used by Touch Portal can import it:
+1. Download the dependency installer from the repository, inspect it, and run it:
+
+	```sh
+	wget -O install-linux-dependencies.sh https://raw.githubusercontent.com/ariksubagia/aigakira-virtual-joysticks/main/install-linux-dependencies.sh
+	less install-linux-dependencies.sh
+	bash install-linux-dependencies.sh
+	```
+
+	The download URL becomes available once the script is pushed to the repository. The installer supports Arch-based, Debian/Ubuntu, Fedora/RHEL, and openSUSE/SUSE distributions and uses their package manager to install system Python and `evdev`. It requests `sudo` when needed. It does not install Touch Portal or change device permissions or group membership. Unsupported distributions must install these dependencies manually.
+
+	To check dependencies and `/dev/uinput` access without installing anything, run `bash install-linux-dependencies.sh --check` as the user running Touch Portal. A failed access check exits with a nonzero status, even if dependency installation succeeded.
+
+2. Verify that the interpreter used by Touch Portal can import the dependency:
 
 	```sh
 	/usr/bin/python3 -c 'import evdev; print("evdev is available")'
 	```
 
-2. Check that your user can write to `/dev/uinput`:
+3. Check that your user can write to `/dev/uinput`:
 
 	```sh
 	test -w /dev/uinput && echo 'uinput is writable' || echo 'uinput is unavailable or not writable'
@@ -39,9 +51,9 @@ Use an existing `aigakira-virtual-joysticks.tpp` package, or create one using th
 
 	If it is unavailable or not writable, configure the `uinput` module and device permissions using your distribution's instructions. Avoid running Touch Portal as root. Permissions for general input-device groups can also grant access to other input devices, so review them carefully.
 
-3. Stop any separately running joystick server so UDP port `12100` is free.
-4. In Touch Portal, open **Settings > Import plugin**, select `aigakira-virtual-joysticks.tpp`, and approve the plugin when prompted. Enable or restart it from the plug-in settings if needed.
-5. Start your game after the plugin. The four Linux devices are named `aigakira-virtual-joystick-1` through `aigakira-virtual-joystick-4`.
+4. Stop any separately running joystick server so UDP port `12100` is free.
+5. In Touch Portal, open **Settings > Import plugin**, select `aigakira-virtual-joysticks.tpp`, and approve the plugin when prompted. Enable or restart it from the plug-in settings if needed.
+6. Start your game after the plugin. The four Linux devices are named `aigakira-virtual-joystick-1` through `aigakira-virtual-joystick-4`.
 
 ### Windows
 
@@ -85,7 +97,7 @@ The build script creates a `.tpp` archive containing the plugin, both server imp
 From the project directory on Linux, with `evdev` available to the Python interpreter, run:
 
 ```sh
-python3 -m unittest -v test_aigakira_virtual_joysticks test_aigakira_windows
+python3 -m unittest -v test_aigakira_virtual_joysticks test_aigakira_windows test_install_linux_dependencies
 ```
 
 The Windows tests use simulated vJoy devices; they do not replace testing with a real Windows driver and game.

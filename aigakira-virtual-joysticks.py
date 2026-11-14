@@ -27,6 +27,7 @@ def create_virtual_joysticks():
         (e.ABS_RY, AbsInfo(value=0, min=-32768, max=32767, fuzz=0, flat=0, resolution=0)),     # Right Stick Y
         (e.ABS_Z, AbsInfo(value=0, min=0, max=255, fuzz=0, flat=0, resolution=0)),            # Left Trigger
         (e.ABS_RZ, AbsInfo(value=0, min=0, max=255, fuzz=0, flat=0, resolution=0)),           # Right Trigger
+        (e.ABS_THROTTLE, AbsInfo(value=0, min=-32768, max=32767, fuzz=0, flat=0, resolution=0)),
         (e.ABS_HAT0X, AbsInfo(value=0, min=-1, max=1, fuzz=0, flat=0, resolution=0)),          # D-Pad Hat X
         (e.ABS_HAT0Y, AbsInfo(value=0, min=-1, max=1, fuzz=0, flat=0, resolution=0)),          # D-Pad Hat Y
     ]

@@ -6,7 +6,7 @@ A Touch Portal plugin that turns button and axis actions into virtual joystick i
 
 ## Features
 
-- Four virtual devices, each with 32 buttons, six axes, and a directional hat.
+- Four virtual devices, each with 32 buttons, six controllable axes, and a directional hat. Linux also exposes a neutral auxiliary axis for Proton compatibility.
 - Button pulse, press, and release actions; axis and hat value actions.
 - Automatic server startup and shutdown with the Touch Portal plugin.
 - Optional UDP forwarding to a server on another computer.
@@ -106,6 +106,8 @@ The Windows tests use simulated vJoy devices; they do not replace testing with a
 
 On Windows, stick and trigger values are scaled to vJoy's 0-32767 range. The two hat axes combine into the first continuous POV, including diagonals.
 
+On Linux, an additional neutral throttle axis is exposed to avoid a Proton 9 heuristic that can identify six-axis joysticks as XInput gamepads. It is not controlled by plugin actions. This compatibility change has not yet been verified in ETS2 and may require controller bindings to be checked after updating.
+
 ## UDP Settings
 
 The local server listens on `127.0.0.1:12100`. The plugin's **UDP Host** and **UDP Port** settings control where actions are sent; changing them does not change the local server's bind address or port. The local server still starts when a remote destination is configured.
@@ -134,6 +136,8 @@ Commands are UTF-8 JSON datagrams, for example:
 - **No action reaches the server:** Look for `Paired with Touch Portal` and `Sent` in the log. Check that the plugin is enabled, the button contains an Aigakira Virtual Joysticks action, and UDP Host and Port match the destination. UDP does not confirm delivery.
 - **Button remains pressed:** A lost UDP release or a Press action without a corresponding Release can leave it held. Send Release first; use Pulse for ordinary taps.
 - **Game detects the device but not the input:** Select it in an available controller slot, then bind using Pulse. For ETS2, try disabling Steam Input for the game and restarting it if binding still fails.
+- **ETS2 sees only some buttons on Linux/Proton:** In ETS2's `game.log.txt`, find the `[di8] Initializing device` section for the virtual joystick and check its listed button inputs. For example, `b10` may be displayed as `Button 9` because the displayed labels are zero-based. If the game lists fewer buttons than Linux exposes, Steam Input or Proton controller mapping may be limiting them; try disabling Steam Input in the game's Steam controller settings and restarting ETS2, then check the log again. This may change how other controllers work and is not guaranteed to fix every Proton setup. Select the virtual device in an ETS2 controller slot and use Pulse when binding.
+- **Several inputs appear held while binding:** Check for Touch Portal actions using Press without a matching Release. Send Release for those buttons or restart the plugin to recreate the devices; restart ETS2 afterward if it does not reconnect them.
 - **After updating:** Re-import the newly built package and restart the plugin. If an earlier installation used a different plugin folder, check that Touch Portal does not retain a duplicate.
 
 ## License

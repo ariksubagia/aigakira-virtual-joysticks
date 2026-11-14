@@ -14,7 +14,7 @@ plugin = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(plugin)
 
 ecodes = types.SimpleNamespace(EV_KEY=1, EV_ABS=3, ABS_X=0, ABS_Y=1, ABS_RX=3, ABS_RY=4,
-                               ABS_Z=2, ABS_RZ=5, ABS_HAT0X=16, ABS_HAT0Y=17)
+                               ABS_Z=2, ABS_RZ=5, ABS_THROTTLE=6, ABS_HAT0X=16, ABS_HAT0Y=17)
 evdev = types.ModuleType("evdev")
 evdev.UInput = object
 evdev.AbsInfo = object
@@ -52,6 +52,11 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(len(devices), 4)
         self.assertEqual([call.kwargs["name"] for call in create_device.call_args_list],
                          [f"aigakira-virtual-joystick-{number}" for number in range(1, 5)])
+        capabilities = create_device.call_args_list[0].args[0]
+        axes = [axis for axis, _ in capabilities[joysticks.e.EV_ABS]]
+        self.assertIn(joysticks.e.ABS_THROTTLE, axes)
+        self.assertEqual(len(axes) - 2, 7)
+        self.assertEqual(len(capabilities[joysticks.e.EV_KEY]), 32)
 
     def test_unsupported_platform_does_not_start_server(self):
         for platform in ("darwin",):
@@ -121,6 +126,17 @@ class ProtocolTests(unittest.TestCase):
                 plugin.handle_message(message, settings, sender)
                 joysticks.handle_message(devices, json.loads(receiver.recv(4096)))
         self.assertEqual(device.events, [(1, 1, 1), (1, 1, 0), (3, 0, -32768)])
+
+    def test_all_button_numbers_reach_linux_device(self):
+        device = Device()
+        devices = [(device, list(range(32)))]
+        for button in range(1, 33):
+            message = action("button", device=1, number=button, action="Press")
+            joysticks.handle_message(devices, plugin.action_to_command(message))
+            message = action("button", device=1, number=button, action="Release")
+            joysticks.handle_message(devices, plugin.action_to_command(message))
+        expected = [(1, number, value) for number in range(32) for value in (1, 0)]
+        self.assertEqual(device.events, expected)
 
     def test_pulse_and_invalid_commands(self):
         device = Device()

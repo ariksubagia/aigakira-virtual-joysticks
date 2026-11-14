@@ -1,7 +1,7 @@
 {
   "api": 7,
   "version": 1,
-  "name": "Virtual Joysticks",
+  "name": "Aigakira Virtual Joysticks",
   "id": "io.github.virtualjoysticks.plugin",
   "configuration": {"parentCategory": "games"},
   "plugin_start_cmd_linux": "/usr/bin/python3 plugin.py",
@@ -13,7 +13,7 @@
   "categories": [
     {
       "id": "io.github.virtualjoysticks.category",
-      "name": "Virtual Joysticks",
+      "name": "Aigakira Virtual Joysticks",
       "actions": [
         {
           "id": "io.github.virtualjoysticks.button",

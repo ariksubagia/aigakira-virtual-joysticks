@@ -92,7 +92,7 @@ The Windows tests use simulated vJoy devices; they do not replace testing with a
 
 ## Using The Plugin
 
-1. In Touch Portal, add an action from **Virtual Joysticks** to a button.
+1. In Touch Portal, add an action from **Aigakira Virtual Joysticks** to a button.
 2. Select a device from 1-4 and choose the desired action:
 	- **Joystick button:** Select a button from 1-32 and choose **Pulse**, **Press**, or **Release**. Pulse presses for 200 ms, then releases. Use Press and Release in the appropriate button-down and button-up flows for a held input.
 	- **Set joystick axis:** Select an axis and enter a raw value. Values remain set until changed.
@@ -130,8 +130,8 @@ Commands are UTF-8 JSON datagrams, for example:
 
 ## Troubleshooting
 
-- **Plugin or server does not start:** Check Touch Portal's log under `Virtual Joysticks`: `~/.config/TouchPortal/log.txt` on Linux or `%APPDATA%\TouchPortal\log.txt` on Windows. Look for missing dependencies, device permissions or configuration, and port conflicts. Resolve the error and restart the plugin; a failed server is not automatically retried.
-- **No action reaches the server:** Look for `Paired with Touch Portal` and `Sent` in the log. Check that the plugin is enabled, the button contains a Virtual Joysticks action, and UDP Host and Port match the destination. UDP does not confirm delivery.
+- **Plugin or server does not start:** Check Touch Portal's log under `Aigakira Virtual Joysticks`: `~/.config/TouchPortal/log.txt` on Linux or `%APPDATA%\TouchPortal\log.txt` on Windows. Look for missing dependencies, device permissions or configuration, and port conflicts. Resolve the error and restart the plugin; a failed server is not automatically retried.
+- **No action reaches the server:** Look for `Paired with Touch Portal` and `Sent` in the log. Check that the plugin is enabled, the button contains an Aigakira Virtual Joysticks action, and UDP Host and Port match the destination. UDP does not confirm delivery.
 - **Button remains pressed:** A lost UDP release or a Press action without a corresponding Release can leave it held. Send Release first; use Pulse for ordinary taps.
 - **Game detects the device but not the input:** Select it in an available controller slot, then bind using Pulse. For ETS2, try disabling Steam Input for the game and restarting it if binding still fails.
 - **After updating:** Re-import the newly built package and restart the plugin. If an earlier installation used a different plugin folder, check that Touch Portal does not retain a duplicate.

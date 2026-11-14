@@ -139,6 +139,8 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(settings, {"host": "192.0.2.1", "port": 1234})
         manifest = json.loads((ROOT / "aigakira-virtual-joysticks" / "entry.tp").read_text())
         self.assertEqual(manifest["id"], plugin.PLUGIN_ID)
+        self.assertEqual(manifest["name"], "Aigakira Virtual Joysticks")
+        self.assertEqual(manifest["categories"][0]["name"], "Aigakira Virtual Joysticks")
         self.assertEqual(manifest["version"], 1)
         self.assertEqual((ROOT / "VERSION").read_text().strip(), "0.0.1")
         self.assertIn("plugin_start_cmd_linux", manifest)
